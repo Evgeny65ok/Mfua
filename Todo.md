@@ -18,27 +18,7 @@
 ### Модули
 
 ```
-* [x] VS Code/Zed Editor
-* [x] Bash-команды
-* [x] Bash-программирование
-* [x] Скрипт синхронизации репозиториев
-* [x] Git - основы (Git-bash) + командная работа
-* [x] Markdown
-* [x] Mermaid
-* [x] Static Website on Github Pages - html+css+js
-* [x] WSL 2.0 (Ubuntu)
-* [x] Docker - загрузка и установка + основы создания конейнеров и управления
-* [x] Docker готовые образы
-* [x] Dockerfile
-* [x] CI
-* [ ] CD
-* [.] Docker Compose
-* [ ] Virtual Box (Alt Education 11)
-* [ ] Контроллер домена и групповые политики на Alt Education 11
-* [ ] Антивирусы
-* [ ] Брандмауэр
-* [ ] Сети
-* [ ] C++
+*
     * [ ] Make
     * [ ] Cmake
     * [ ] Gdb
