@@ -301,6 +301,7 @@ code .
 ---
 
 ## Exam questions
+<img width="1200" height="630" alt="image" src="https://github.com/user-attachments/assets/4d3dde37-507b-41e1-88c8-aa67a218b516" />
 
 Вопросы к экзаменам
 
