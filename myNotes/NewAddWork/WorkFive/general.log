@@ -1,0 +1,120 @@
+/usr/sbin/mysqld, Version: 8.0.46 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2026-11-09T08:29:25.825949Z	    9 Query	INSERT INTO customers_3nf (customer_name, customer_city)
+SELECT DISTINCT customer_name, customer_city FROM orders_bad
+2026-11-09T08:29:25.840543Z	    9 Query	INSERT INTO products_3nf (product_name, product_price)
+SELECT DISTINCT product_name, product_price FROM orders_bad
+2026-11-09T08:29:25.856166Z	    9 Query	INSERT INTO orders_3nf (order_id, customer_id, order_date)
+SELECT o.order_id, c.customer_id, o.order_date
+FROM orders_bad o
+JOIN customers_3nf c ON c.customer_name = o.customer_name AND c.customer_city = o.customer_city
+2026-11-09T08:29:26.472049Z	    9 Query	INSERT INTO order_items_3nf (order_id, product_id, quantity)
+SELECT o.order_id, p.product_id, o.quantity
+FROM orders_bad o
+JOIN products_3nf p ON p.product_name = o.product_name AND p.product_price = o.product_price
+2026-11-09T08:29:33.313799Z	    9 Query	SELECT SUM(product_price * quantity) AS total_old FROM orders_bad
+2026-11-09T08:29:34.031989Z	    9 Query	SELECT SUM(p.product_price * oi.quantity) AS total_new 
+FROM order_items_3nf oi JOIN products_3nf p ON oi.product_id = p.product_id
+2026-11-09T08:29:39.114224Z	    9 Query	UPDATE customers_3nf SET customer_city = 'Сочи' WHERE customer_name = 'Иван'
+2026-11-09T08:29:39.130101Z	    9 Query	DELETE FROM order_items_3nf WHERE order_id IN (SELECT order_id FROM orders_3nf WHERE customer_id = (SELECT customer_id FROM customers_3nf WHERE customer_name = 'Мария' LIMIT 1))
+2026-11-09T08:29:39.141940Z	    9 Query	DELETE FROM orders_3nf WHERE customer_id = (SELECT customer_id FROM customers_3nf WHERE customer_name = 'Мария' LIMIT 1)
+2026-11-09T08:29:39.153250Z	    9 Query	SELECT * FROM customers_3nf WHERE customer_name = 'Мария'
+2026-11-09T08:29:39.155004Z	    9 Query	INSERT INTO customers_3nf (customer_name, customer_city) VALUES ('Новый клиент', 'Тверь')
+2026-11-09T08:29:39.824060Z	    9 Query	SELECT * FROM customers_3nf WHERE customer_name = 'Новый клиент'
+2026-11-09T08:29:45.176018Z	    9 Query	RENAME TABLE orders_bad TO orders_bad_backup
+2026-11-09T08:29:49.703720Z	    9 Quit	
+2026-11-09T08:30:08.329178Z	   10 Connect	root@localhost on  using Socket
+2026-11-09T08:30:08.329367Z	   10 Query	/*!40100 SET @@SQL_MODE='' */
+2026-11-09T08:30:08.329510Z	   10 Query	/*!40103 SET TIME_ZONE='+00:00' */
+2026-11-09T08:30:08.329795Z	   10 Query	/*!80000 SET SESSION information_schema_stats_expiry=0 */
+2026-11-09T08:30:08.329923Z	   10 Query	SET SESSION NET_READ_TIMEOUT= 86400, SESSION NET_WRITE_TIMEOUT= 86400
+2026-11-09T08:30:08.330515Z	   10 Query	SHOW VARIABLES LIKE 'gtid_mode'
+2026-11-09T08:30:08.333856Z	   10 Query	SELECT LOGFILE_GROUP_NAME, FILE_NAME, TOTAL_EXTENTS, INITIAL_SIZE, ENGINE, EXTRA FROM INFORMATION_SCHEMA.FILES WHERE ENGINE = 'ndbcluster' AND FILE_TYPE = 'UNDO LOG' AND FILE_NAME IS NOT NULL AND LOGFILE_GROUP_NAME IS NOT NULL AND LOGFILE_GROUP_NAME IN (SELECT DISTINCT LOGFILE_GROUP_NAME FROM INFORMATION_SCHEMA.FILES WHERE ENGINE = 'ndbcluster' AND FILE_TYPE = 'DATAFILE' AND TABLESPACE_NAME IN (SELECT DISTINCT TABLESPACE_NAME FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA IN ('shop_norm'))) GROUP BY LOGFILE_GROUP_NAME, FILE_NAME, ENGINE, TOTAL_EXTENTS, INITIAL_SIZE ORDER BY LOGFILE_GROUP_NAME
+2026-11-09T08:30:08.336390Z	   10 Query	SELECT DISTINCT TABLESPACE_NAME, FILE_NAME, LOGFILE_GROUP_NAME, EXTENT_SIZE, INITIAL_SIZE, ENGINE FROM INFORMATION_SCHEMA.FILES WHERE FILE_TYPE = 'DATAFILE' AND TABLESPACE_NAME IN (SELECT DISTINCT TABLESPACE_NAME FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA IN ('shop_norm')) ORDER BY TABLESPACE_NAME, LOGFILE_GROUP_NAME
+2026-11-09T08:30:08.337109Z	   10 Query	SHOW VARIABLES LIKE 'ndbinfo\_version'
+2026-11-09T08:30:08.338899Z	   10 Init DB	shop_norm
+2026-11-09T08:30:08.338998Z	   10 Query	show tables
+2026-11-09T08:30:08.339503Z	   10 Query	LOCK TABLES `customers_3nf` READ /*!32311 LOCAL */,`order_items_3nf` READ /*!32311 LOCAL */,`orders_3nf` READ /*!32311 LOCAL */,`orders_bad_backup` READ /*!32311 LOCAL */,`products_3nf` READ /*!32311 LOCAL */
+2026-11-09T08:30:08.340089Z	   10 Query	show table status like 'customers\_3nf'
+2026-11-09T08:30:08.340749Z	   10 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-09T08:30:08.340849Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.340943Z	   10 Query	show create table `customers_3nf`
+2026-11-09T08:30:08.341102Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.341215Z	   10 Query	show fields from `customers_3nf`
+2026-11-09T08:30:08.341891Z	   10 Query	show fields from `customers_3nf`
+2026-11-09T08:30:08.342356Z	   10 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `customers_3nf`
+2026-11-09T08:30:08.342522Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.342635Z	   10 Query	use `shop_norm`
+2026-11-09T08:30:08.342755Z	   10 Query	select @@collation_database
+2026-11-09T08:30:08.342876Z	   10 Query	SHOW TRIGGERS LIKE 'customers\_3nf'
+2026-11-09T08:30:08.343518Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.343625Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.343780Z	   10 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'shop_norm' AND TABLE_NAME = 'customers_3nf'
+2026-11-09T08:30:08.344136Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.344307Z	   10 Query	show table status like 'order\_items\_3nf'
+2026-11-09T08:30:08.344939Z	   10 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-09T08:30:08.345065Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.345168Z	   10 Query	show create table `order_items_3nf`
+2026-11-09T08:30:08.345350Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.345469Z	   10 Query	show fields from `order_items_3nf`
+2026-11-09T08:30:08.346109Z	   10 Query	show fields from `order_items_3nf`
+2026-11-09T08:30:08.346598Z	   10 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_items_3nf`
+2026-11-09T08:30:08.346763Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.346866Z	   10 Query	use `shop_norm`
+2026-11-09T08:30:08.347007Z	   10 Query	select @@collation_database
+2026-11-09T08:30:08.347143Z	   10 Query	SHOW TRIGGERS LIKE 'order\_items\_3nf'
+2026-11-09T08:30:08.347547Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.347669Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.347784Z	   10 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'shop_norm' AND TABLE_NAME = 'order_items_3nf'
+2026-11-09T08:30:08.347982Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.348106Z	   10 Query	show table status like 'orders\_3nf'
+2026-11-09T08:30:08.348695Z	   10 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-09T08:30:08.348815Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.348917Z	   10 Query	show create table `orders_3nf`
+2026-11-09T08:30:08.349085Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.349191Z	   10 Query	show fields from `orders_3nf`
+2026-11-09T08:30:08.349633Z	   10 Query	show fields from `orders_3nf`
+2026-11-09T08:30:08.350078Z	   10 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `orders_3nf`
+2026-11-09T08:30:08.350227Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.350334Z	   10 Query	use `shop_norm`
+2026-11-09T08:30:08.350454Z	   10 Query	select @@collation_database
+2026-11-09T08:30:08.350585Z	   10 Query	SHOW TRIGGERS LIKE 'orders\_3nf'
+2026-11-09T08:30:08.350957Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.351066Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.351193Z	   10 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'shop_norm' AND TABLE_NAME = 'orders_3nf'
+2026-11-09T08:30:08.351396Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.351515Z	   10 Query	show table status like 'orders\_bad\_backup'
+2026-11-09T08:30:08.352028Z	   10 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-09T08:30:08.352122Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.352214Z	   10 Query	show create table `orders_bad_backup`
+2026-11-09T08:30:08.352428Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.352538Z	   10 Query	show fields from `orders_bad_backup`
+2026-11-09T08:30:08.352997Z	   10 Query	show fields from `orders_bad_backup`
+2026-11-09T08:30:08.353448Z	   10 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `orders_bad_backup`
+2026-11-09T08:30:08.353627Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.353857Z	   10 Query	use `shop_norm`
+2026-11-09T08:30:08.354006Z	   10 Query	select @@collation_database
+2026-11-09T08:30:08.354152Z	   10 Query	SHOW TRIGGERS LIKE 'orders\_bad\_backup'
+2026-11-09T08:30:08.354519Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.354622Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.354735Z	   10 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'shop_norm' AND TABLE_NAME = 'orders_bad_backup'
+2026-11-09T08:30:08.354901Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.355012Z	   10 Query	show table status like 'products\_3nf'
+2026-11-09T08:30:08.355505Z	   10 Query	SET SQL_QUOTE_SHOW_CREATE=1
+2026-11-09T08:30:08.355600Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.355692Z	   10 Query	show create table `products_3nf`
+2026-11-09T08:30:08.355843Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.356008Z	   10 Query	show fields from `products_3nf`
+2026-11-09T08:30:08.356511Z	   10 Query	show fields from `products_3nf`
+2026-11-09T08:30:08.356961Z	   10 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `products_3nf`
+2026-11-09T08:30:08.357164Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.357287Z	   10 Query	use `shop_norm`
+2026-11-09T08:30:08.357422Z	   10 Query	select @@collation_database
+2026-11-09T08:30:08.357554Z	   10 Query	SHOW TRIGGERS LIKE 'products\_3nf'
+2026-11-09T08:30:08.357960Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.358056Z	   10 Query	SET SESSION character_set_results = 'binary'
+2026-11-09T08:30:08.358162Z	   10 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'shop_norm' AND TABLE_NAME = 'products_3nf'
+2026-11-09T08:30:08.358325Z	   10 Query	SET SESSION character_set_results = 'utf8mb4'
+2026-11-09T08:30:08.358418Z	   10 Query	UNLOCK TABLES
+2026-11-09T08:30:08.358530Z	   10 Quit	

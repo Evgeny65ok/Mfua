@@ -1,0 +1,27 @@
+2026-11-09T08:29:25.825949Z	    9 Query	INSERT INTO customers_3nf (customer_name, customer_city)
+2026-11-09T08:29:25.840543Z	    9 Query	INSERT INTO products_3nf (product_name, product_price)
+2026-11-09T08:29:25.856166Z	    9 Query	INSERT INTO orders_3nf (order_id, customer_id, order_date)
+2026-11-09T08:29:26.472049Z	    9 Query	INSERT INTO order_items_3nf (order_id, product_id, quantity)
+2026-11-09T08:29:33.313799Z	    9 Query	SELECT SUM(product_price * quantity) AS total_old FROM orders_bad
+2026-11-09T08:29:34.031989Z	    9 Query	SELECT SUM(p.product_price * oi.quantity) AS total_new 
+2026-11-09T08:29:39.114224Z	    9 Query	UPDATE customers_3nf SET customer_city = 'Сочи' WHERE customer_name = 'Иван'
+2026-11-09T08:29:39.130101Z	    9 Query	DELETE FROM order_items_3nf WHERE order_id IN (SELECT order_id FROM orders_3nf WHERE customer_id = (SELECT customer_id FROM customers_3nf WHERE customer_name = 'Мария' LIMIT 1))
+2026-11-09T08:29:39.141940Z	    9 Query	DELETE FROM orders_3nf WHERE customer_id = (SELECT customer_id FROM customers_3nf WHERE customer_name = 'Мария' LIMIT 1)
+2026-11-09T08:29:39.153250Z	    9 Query	SELECT * FROM customers_3nf WHERE customer_name = 'Мария'
+2026-11-09T08:29:39.155004Z	    9 Query	INSERT INTO customers_3nf (customer_name, customer_city) VALUES ('Новый клиент', 'Тверь')
+2026-11-09T08:29:39.824060Z	    9 Query	SELECT * FROM customers_3nf WHERE customer_name = 'Новый клиент'
+2026-11-09T08:29:45.176018Z	    9 Query	RENAME TABLE orders_bad TO orders_bad_backup
+2026-11-09T08:30:08.330515Z	   10 Query	SHOW VARIABLES LIKE 'gtid_mode'
+2026-11-09T08:30:08.333856Z	   10 Query	SELECT LOGFILE_GROUP_NAME, FILE_NAME, TOTAL_EXTENTS, INITIAL_SIZE, ENGINE, EXTRA FROM INFORMATION_SCHEMA.FILES WHERE ENGINE = 'ndbcluster' AND FILE_TYPE = 'UNDO LOG' AND FILE_NAME IS NOT NULL AND LOGFILE_GROUP_NAME IS NOT NULL AND LOGFILE_GROUP_NAME IN (SELECT DISTINCT LOGFILE_GROUP_NAME FROM INFORMATION_SCHEMA.FILES WHERE ENGINE = 'ndbcluster' AND FILE_TYPE = 'DATAFILE' AND TABLESPACE_NAME IN (SELECT DISTINCT TABLESPACE_NAME FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA IN ('shop_norm'))) GROUP BY LOGFILE_GROUP_NAME, FILE_NAME, ENGINE, TOTAL_EXTENTS, INITIAL_SIZE ORDER BY LOGFILE_GROUP_NAME
+2026-11-09T08:30:08.336390Z	   10 Query	SELECT DISTINCT TABLESPACE_NAME, FILE_NAME, LOGFILE_GROUP_NAME, EXTENT_SIZE, INITIAL_SIZE, ENGINE FROM INFORMATION_SCHEMA.FILES WHERE FILE_TYPE = 'DATAFILE' AND TABLESPACE_NAME IN (SELECT DISTINCT TABLESPACE_NAME FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_SCHEMA IN ('shop_norm')) ORDER BY TABLESPACE_NAME, LOGFILE_GROUP_NAME
+2026-11-09T08:30:08.337109Z	   10 Query	SHOW VARIABLES LIKE 'ndbinfo\_version'
+2026-11-09T08:30:08.342356Z	   10 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `customers_3nf`
+2026-11-09T08:30:08.343780Z	   10 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'shop_norm' AND TABLE_NAME = 'customers_3nf'
+2026-11-09T08:30:08.346598Z	   10 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `order_items_3nf`
+2026-11-09T08:30:08.347784Z	   10 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'shop_norm' AND TABLE_NAME = 'order_items_3nf'
+2026-11-09T08:30:08.350078Z	   10 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `orders_3nf`
+2026-11-09T08:30:08.351193Z	   10 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'shop_norm' AND TABLE_NAME = 'orders_3nf'
+2026-11-09T08:30:08.353448Z	   10 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `orders_bad_backup`
+2026-11-09T08:30:08.354735Z	   10 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'shop_norm' AND TABLE_NAME = 'orders_bad_backup'
+2026-11-09T08:30:08.356961Z	   10 Query	SELECT /*!40001 SQL_NO_CACHE */ * FROM `products_3nf`
+2026-11-09T08:30:08.358162Z	   10 Query	SELECT COLUMN_NAME,                       JSON_EXTRACT(HISTOGRAM, '$."number-of-buckets-specified"')                FROM information_schema.COLUMN_STATISTICS                WHERE SCHEMA_NAME = 'shop_norm' AND TABLE_NAME = 'products_3nf'
