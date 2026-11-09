@@ -1,0 +1,12 @@
+2026-11-09 07:03:10.375052	Query	SELECT DATABASE()
+2026-11-09 07:03:10.379613	Init DB	my_database
+2026-11-09 07:03:10.380356	Query	show databases
+2026-11-09 07:03:10.380949	Query	show tables
+2026-11-09 07:03:10.382301	Field List	users 
+2026-11-09 07:03:10.383075	Query	SELECT * FROM users
+2026-11-09 07:03:10.708390	Query	UPDATE users SET name = 'Тест' WHERE id = 1
+2026-11-09 07:03:14.339986	Query	SELECT event_time, command_type, argument FROM mysql.general_log INTO OUTFILE '/var/lib/mysql-files/my_actions.log'
+2026-11-09 07:03:17.860006	Quit	
+2026-11-09 07:03:39.892847	Connect	root@localhost on  using Socket
+2026-11-09 07:03:39.893218	Query	select @@version_comment limit 1
+2026-11-09 07:03:43.843164	Query	SELECT event_time, command_type, argument FROM mysql.general_log INTO OUTFILE '/var/lib/mysql-files/my_actions_new.log'
