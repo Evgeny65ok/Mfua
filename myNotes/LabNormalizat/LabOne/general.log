@@ -1,0 +1,64 @@
+/usr/sbin/mysqld, Version: 8.0.46 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2026-11-10T08:06:56.449596Z	   12 Query	SELECT DATABASE()
+2026-11-10T08:06:56.449876Z	   12 Init DB	sales_norm
+2026-11-10T08:06:56.450546Z	   12 Query	show databases
+2026-11-10T08:06:56.451166Z	   12 Query	show tables
+2026-11-10T08:06:56.451912Z	   12 Field List	customers 
+2026-11-10T08:06:56.452127Z	   12 Field List	products 
+2026-11-10T08:06:56.452313Z	   12 Field List	report_items 
+2026-11-10T08:06:56.452474Z	   12 Field List	reports 
+2026-11-10T08:06:56.452679Z	   12 Field List	sales_unnormalized_2_backup 
+2026-11-10T08:06:56.453515Z	   12 Query	SELECT * FROM customers
+2026-11-10T08:06:56.454086Z	   12 Query	SELECT * FROM products
+2026-11-10T08:06:56.454839Z	   12 Query	SELECT * FROM reports
+2026-11-10T08:06:56.761585Z	   12 Query	SELECT * FROM report_items
+2026-11-10T08:07:00.336666Z	   12 Quit	
+2026-11-10T08:08:05.062475Z	   13 Connect	root@localhost on  using Socket
+2026-11-10T08:08:05.062834Z	   13 Query	select @@version_comment limit 1
+2026-11-10T08:08:09.837490Z	   13 Query	SELECT DATABASE()
+2026-11-10T08:08:09.837774Z	   13 Init DB	sales_norm
+2026-11-10T08:08:09.838485Z	   13 Query	show databases
+2026-11-10T08:08:09.839384Z	   13 Query	show tables
+2026-11-10T08:08:09.840257Z	   13 Field List	customers 
+2026-11-10T08:08:09.840457Z	   13 Field List	products 
+2026-11-10T08:08:09.840685Z	   13 Field List	report_items 
+2026-11-10T08:08:09.840900Z	   13 Field List	reports 
+2026-11-10T08:08:09.841097Z	   13 Field List	sales_unnormalized_2_backup 
+2026-11-10T08:08:09.841710Z	   13 Query	SELECT * FROM customers
+2026-11-10T08:08:09.842193Z	   13 Query	SELECT * FROM products
+2026-11-10T08:08:09.843014Z	   13 Query	SELECT * FROM reports
+2026-11-10T08:08:09.843730Z	   13 Query	SELECT * FROM report_items
+2026-11-10T08:08:09.844978Z	   13 Query	SELECT SUM(price * quantity) AS total_old FROM sales_unnormalized_2
+2026-11-10T08:08:10.109001Z	   13 Quit	
+2026-11-10T08:08:33.893139Z	   14 Connect	root@localhost on  using Socket
+2026-11-10T08:08:33.893431Z	   14 Query	select @@version_comment limit 1
+2026-11-10T08:08:37.140498Z	   14 Query	SELECT DATABASE()
+2026-11-10T08:08:37.140713Z	   14 Init DB	sales_norm
+2026-11-10T08:08:37.141411Z	   14 Query	show databases
+2026-11-10T08:08:37.142125Z	   14 Query	show tables
+2026-11-10T08:08:37.142836Z	   14 Field List	customers 
+2026-11-10T08:08:37.143046Z	   14 Field List	products 
+2026-11-10T08:08:37.143264Z	   14 Field List	report_items 
+2026-11-10T08:08:37.143526Z	   14 Field List	reports 
+2026-11-10T08:08:37.143745Z	   14 Field List	sales_unnormalized_2_backup 
+2026-11-10T08:08:37.144855Z	   14 Query	SELECT * FROM sales_unnormalized_2
+2026-11-10T08:08:37.146643Z	   14 Query	SELECT * FROM customers
+2026-11-10T08:08:37.147167Z	   14 Query	SELECT * FROM products
+2026-11-10T08:08:37.147811Z	   14 Query	SELECT * FROM reports
+2026-11-10T08:08:37.148366Z	   14 Query	SELECT * FROM report_items
+2026-11-10T08:08:37.149684Z	   14 Query	SELECT SUM(price * quantity) AS total_old FROM sales_unnormalized_2
+2026-11-10T08:08:37.151435Z	   14 Query	SELECT SUM(p.price * ri.quantity) AS total_new FROM report_items ri JOIN products p ON ri.product_id = p.product_id
+2026-11-10T08:08:37.155129Z	   14 Query	SELECT SUM(p.price * ri.quantity) AS total_spent
+FROM customers c
+JOIN reports r ON c.customer_id = r.customer_id
+JOIN report_items ri ON r.report_id = ri.report_id
+JOIN products p ON ri.product_id = p.product_id
+WHERE c.customer_id = 12
+2026-11-10T08:08:37.156395Z	   14 Query	DESCRIBE customers
+2026-11-10T08:08:37.157812Z	   14 Query	DESCRIBE products
+2026-11-10T08:08:37.158904Z	   14 Query	DESCRIBE reports
+2026-11-10T08:08:37.160106Z	   14 Query	DESCRIBE report_items
+2026-11-10T08:08:37.161733Z	   14 Query	SHOW TABLES
+2026-11-10T08:08:37.587862Z	   14 Quit	
