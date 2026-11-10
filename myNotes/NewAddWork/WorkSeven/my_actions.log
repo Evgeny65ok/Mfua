@@ -1,0 +1,10 @@
+2026-11-10T06:57:23.661117Z	   12 Query	SELECT DATABASE()
+2026-11-10T06:57:23.666015Z	   12 Query	SELECT c.name, o.amount FROM customers c JOIN orders o ON c.id = o.customer_id
+2026-11-10T06:57:23.667229Z	   12 Query	SELECT COUNT(*) AS total_customers FROM customers
+2026-11-10T06:58:09.564182Z	   13 Query	SELECT DATABASE()
+2026-11-10T06:58:09.569249Z	   13 Query	SELECT customers.name, orders.order_date, orders.amount FROM customers JOIN orders ON customers.id = orders.customer_id
+2026-11-10T06:58:09.571486Z	   13 Query	SELECT c.name, o.order_date, o.amount FROM customers c JOIN orders o ON c.id = o.customer_id
+2026-11-10T06:58:09.573518Z	   13 Query	SELECT e.name AS employee, m.name AS manager FROM employees e JOIN employees m ON e.manager_id = m.id
+2026-11-10T06:58:09.575326Z	   13 Query	SELECT customer_id, COUNT(*) AS order_count, SUM(amount) AS total_amount FROM orders GROUP BY customer_id
+2026-11-10T06:58:09.577462Z	   13 Query	SELECT id, amount * 2 AS double_amount FROM orders ORDER BY double_amount DESC
+2026-11-10T06:58:09.582018Z	   13 Query	SELECT c.name, o.total FROM customers c JOIN (SELECT customer_id, SUM(amount) AS total FROM orders GROUP BY customer_id) o ON c.id = o.customer_id WHERE o.total > 2000
