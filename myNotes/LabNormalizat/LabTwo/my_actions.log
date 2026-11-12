@@ -1,0 +1,7 @@
+2026-11-12T06:18:57.114550Z	   12 Query	SELECT DATABASE()
+2026-11-12T06:18:57.118622Z	   12 Query	SELECT * FROM clients
+2026-11-12T06:18:57.119195Z	   12 Query	SELECT * FROM products
+2026-11-12T06:18:57.119745Z	   12 Query	SELECT * FROM sales
+2026-11-12T06:18:57.120326Z	   12 Query	SELECT * FROM sale_items
+2026-11-12T06:18:57.122611Z	   12 Query	SELECT SUM(p.unit_price * si.quantity) AS total_new FROM sale_items si JOIN products p ON si.product_id = p.product_id
+2026-11-12T06:18:57.123308Z	   12 Query	SHOW TABLES
