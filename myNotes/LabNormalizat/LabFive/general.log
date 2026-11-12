@@ -1,0 +1,24 @@
+/usr/sbin/mysqld, Version: 8.0.46 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2026-11-12T07:02:08.215821Z	   12 Query	SELECT DATABASE()
+2026-11-12T07:02:08.216038Z	   12 Init DB	sales_norm5
+2026-11-12T07:02:08.216895Z	   12 Query	show databases
+2026-11-12T07:02:08.218338Z	   12 Query	show tables
+2026-11-12T07:02:08.219093Z	   12 Field List	categories 
+2026-11-12T07:02:08.219337Z	   12 Field List	clients 
+2026-11-12T07:02:08.219582Z	   12 Field List	order_items 
+2026-11-12T07:02:08.219822Z	   12 Field List	orders 
+2026-11-12T07:02:08.220072Z	   12 Field List	orders_bad_backup 
+2026-11-12T07:02:08.220343Z	   12 Field List	products 
+2026-11-12T07:02:08.220865Z	   12 Query	SELECT * FROM clients
+2026-11-12T07:02:08.221449Z	   12 Query	SELECT * FROM categories
+2026-11-12T07:02:08.221979Z	   12 Query	SELECT * FROM products
+2026-11-12T07:02:08.222498Z	   12 Query	SELECT * FROM orders
+2026-11-12T07:02:08.223094Z	   12 Query	SELECT * FROM order_items
+2026-11-12T07:02:08.225749Z	   12 Query	SELECT c.class_name, SUM(p.price * oi.quantity) AS total_sales 
+FROM categories c JOIN products p ON c.class_id = p.class_id 
+JOIN order_items oi ON p.product_id = oi.product_id 
+GROUP BY c.class_name
+2026-11-12T07:02:08.226439Z	   12 Query	SHOW TABLES
+2026-11-12T07:02:08.647684Z	   12 Quit	
