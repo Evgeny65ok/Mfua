@@ -1,0 +1,19 @@
+/usr/sbin/mysqld, Version: 8.0.46 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2026-11-12T06:47:14.579455Z	   12 Query	SELECT DATABASE()
+2026-11-12T06:47:14.579656Z	   12 Init DB	sales_norm4
+2026-11-12T06:47:14.580376Z	   12 Query	show databases
+2026-11-12T06:47:14.581699Z	   12 Query	show tables
+2026-11-12T06:47:14.582773Z	   12 Field List	clients 
+2026-11-12T06:47:14.583013Z	   12 Field List	order_items 
+2026-11-12T06:47:14.583214Z	   12 Field List	orders 
+2026-11-12T06:47:14.583591Z	   12 Field List	orders_bad_backup 
+2026-11-12T06:47:14.583874Z	   12 Field List	products 
+2026-11-12T06:47:14.584080Z	   12 Field List	representatives 
+2026-11-12T06:47:14.584670Z	   12 Query	SELECT * FROM clients
+2026-11-12T06:47:14.585635Z	   12 Query	SELECT * FROM representatives
+2026-11-12T06:47:14.586207Z	   12 Query	SELECT * FROM orders
+2026-11-12T06:47:14.586952Z	   12 Query	SELECT * FROM order_items
+2026-11-12T06:47:14.587492Z	   12 Query	SHOW TABLES
+2026-11-12T06:47:14.842493Z	   12 Quit	
