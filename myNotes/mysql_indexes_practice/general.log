@@ -1,0 +1,14 @@
+/usr/sbin/mysqld, Version: 8.0.46 (MySQL Community Server - GPL). started with:
+Tcp port: 3306  Unix socket: /var/run/mysqld/mysqld.sock
+Time                 Id Command    Argument
+2026-11-17T08:36:49.713355Z	   10 Query	SET GLOBAL log_output = 'FILE'
+2026-11-17T08:36:50.025467Z	   10 Query	SHOW VARIABLES LIKE 'general_log%'
+2026-11-17T08:36:54.155494Z	   10 Query	SELECT DATABASE()
+2026-11-17T08:36:54.155749Z	   10 Init DB	index_practice
+2026-11-17T08:36:54.156459Z	   10 Query	show databases
+2026-11-17T08:36:54.157442Z	   10 Query	show tables
+2026-11-17T08:36:54.158224Z	   10 Field List	customers 
+2026-11-17T08:36:54.158422Z	   10 Field List	orders 
+2026-11-17T08:36:54.159095Z	   10 Query	SELECT * FROM orders WHERE amount > 1000
+2026-11-17T08:36:54.449632Z	   10 Query	SHOW INDEX FROM orders
+2026-11-17T08:36:58.041282Z	   10 Quit	
