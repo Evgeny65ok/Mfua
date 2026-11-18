@@ -1,9 +1,8 @@
 # Ускорение сортировки и группировки в MySQL (ORDER BY / GROUP BY)
 
 **Выполнил:** Белевитин Евгений  Александрович
-
 **Дата выполнения:** 18.11.2026  
-**Среда выполнения:** WSL (Ubuntu), Docker Desktop, MySQL 8.0  
+**Среда выполнения:** WSL (Ubuntu), Docker Desktop, MySQL 8.0.46  
 **Путь к рабочей папке:** `/mnt/c/Users/Evg65/Desktop/mysql-sort-lab`
 
 ---
@@ -32,7 +31,21 @@
 
 ## 2. Подготовка окружения
 
-### 2.1. Конфигурация my.cnf
+### 2.1. Создание рабочей папки
+
+Рабочая папка создана на Рабочем столе Windows:
+
+```bash
+mkdir mysql-sort-lab
+cd mysql-sort-lab
+pwd
+# /mnt/c/Users/Evg65/Desktop/mysql-sort-lab
+```
+
+📸 **Скриншот №1:** Создание и переход в рабочую папку
+![mkdir pwd](./1.png)
+
+### 2.2. Конфигурация my.cnf
 
 Для корректной работы лаборатории был создан файл конфигурации `my.cnf` с включённым общим логом запросов:
 
@@ -53,10 +66,10 @@ default-character-set = utf8mb4
 
 > ⚠️ **Важно:** Файл должен быть именно файлом, а не директорией, иначе Docker не запустится.
 
-📸 **Скриншот №1:** Содержимое файла `my.cnf`
-![my.cnf](./1.png)
+📸 **Скриншот №2:** Содержимое файла `my.cnf`
+![my.cnf](./3.png)
 
-### 2.2. Запуск контейнера
+### 2.3. Запуск контейнера
 
 Контейнер MySQL 8.0 был запущен с монтированием тома данных и файла конфигурации:
 
@@ -70,17 +83,17 @@ docker run --name my-mysql \
   -d mysql:8.0
 ```
 
-📸 **Скриншот №2:** Проверка запуска контейнера через `docker ps`
-![docker ps](./2.png)
+📸 **Скриншот №3:** Проверка запуска контейнера через `docker ps`
+![docker ps](./5.png)
 
-### 2.3. Подключение к MySQL
+### 2.4. Подключение к MySQL
 
 ```bash
 docker exec -it my-mysql mysql --default-character-set=utf8mb4 -uroot -p
 ```
 
-📸 **Скриншот №3:** Успешное подключение к MySQL
-![mysql prompt](./3.png)
+📸 **Скриншот №4:** Успешное подключение к MySQL 8.0.46
+![mysql prompt](./4.png)
 
 ---
 
@@ -103,11 +116,11 @@ CREATE TABLE orders (
 
 Таблица заполнена 500 строками случайных данных с помощью генератора на основе `UNION SELECT`.
 
-📸 **Скриншот №4:** Проверка количества строк (`SELECT COUNT(*)`)
-![count check](./4.png)
+📸 **Скриншот №5:** Проверка количества строк (`SELECT COUNT(*)`)
+![count check](./2.png)
 
-📸 **Скриншот №5:** Структура таблицы (`SHOW CREATE TABLE`)
-![table structure](./5.png)
+📸 **Скриншот №6:** Структура таблицы (`SHOW CREATE TABLE`)
+![table structure](./6.png)
 
 ---
 
@@ -126,8 +139,8 @@ EXPLAIN SELECT * FROM orders ORDER BY amount DESC;
 
 Это подтверждает, что без подходящего индекса операция `ORDER BY` становится узким местом.
 
-📸 **Скриншот №6:** EXPLAIN до создания индекса (Using filesort)
-![explain before index](./6.png)
+📸 **Скриншот №7:** EXPLAIN до создания индекса (Using filesort)
+![explain before index](./8.png)
 
 ---
 
@@ -149,7 +162,7 @@ CREATE INDEX idx_amount ON orders(amount);
 - `Extra: Backward index scan` — MySQL читает индекс с конца для получения `DESC` порядка
 - `Using filesort` полностью отсутствует
 
-📸 **Скриншот №7:** EXPLAIN после создания индекса (Backward index scan)
+📸 **Скриншот №8:** EXPLAIN после создания индекса (Backward index scan)
 ![explain after index](./7.png)
 
 ---
@@ -182,10 +195,10 @@ CREATE INDEX idx_status_asc_amount_desc ON orders(status ASC, amount DESC);
 
 После создания нисходящего индекса запрос `ORDER BY status ASC, amount DESC` выполняется без `filesort`.
 
-📸 **Скриншот №8:** Сравнение однородной и разнонаправленной сортировки
-![sort direction comparison](./8.png)
+📸 **Скриншот №9:** Сравнение однородной и разнонаправленной сортировки
+![sort direction comparison](./9.png)
 
-📸 **Скриншот №9:** Демонстрация нисходящего индекса
+📸 **Скриншот №10:** Демонстрация нисходящего индекса
 ![descending index](./9.5.png)
 
 ---
@@ -200,12 +213,12 @@ EXPLAIN SELECT order_date, COUNT(*) FROM orders GROUP BY order_date;
 
 **Результат:**
 - `type: ALL`
-- `Extra: Using temporary; Using filesort`
+- `Extra: Using temporary`
 
-MySQL создаёт внутреннюю временную таблицу для накопления групп, а затем сортирует её. Это наиболее ресурсоёмкий сценарий для группировки.
+MySQL создаёт внутреннюю временную таблицу для накопления групп. Это наиболее ресурсоёмкий сценарий для группировки.
 
-📸 **Скриншот №10:** GROUP BY без индекса (temporary + filesort)
-![group by without index](./9.png)
+📸 **Скриншот №11:** GROUP BY без индекса (Using temporary)
+![group by without index](./10.png)
 
 ---
 
@@ -225,13 +238,12 @@ EXPLAIN SELECT status, COUNT(*) FROM orders GROUP BY status;
 
 **Результат:**
 - `type: index`, `key: idx_status`
-- `rows: 4` (читается только по одной строке на уникальное значение!)
-- `Extra` пустой — `Using temporary` и `Using filesort` исчезли
+- `Extra: Using index` — `Using temporary` исчезло!
 
 MySQL использует **Loose Index Scan** — самый эффективный алгоритм группировки, при котором оптимизатор «прыгает» по уникальным значениям в индексе, не сканируя все строки таблицы.
 
-📸 **Скриншот №11:** Loose Index Scan в действии
-![loose index scan](./10.png)
+📸 **Скриншот №12:** Loose Index Scan в действии
+![loose index scan](./13.png)
 
 ---
 
@@ -250,11 +262,12 @@ EXPLAIN SELECT status, SUM(amount) FROM orders GROUP BY status;
 ```
 
 **Результат:**
+- `key: idx_status_amount`
 - `Extra: Using index`
 
 MySQL выполняет запрос **полностью по индексу**, не обращаясь к основной таблице данных ни разу. Это максимально возможная производительность для данной операции.
 
-📸 **Скриншот №12:** Покрывающий индекс (Using index)
+📸 **Скриншот №13:** Покрывающий индекс (Using index)
 ![covering index](./11.png)
 
 ---
@@ -270,8 +283,8 @@ SET GLOBAL general_log = ON;
 SET GLOBAL general_log_file = '/var/lib/mysql/general.log';
 ```
 
-📸 **Скриншот №13:** Проверка переменных лога после исправления
-![log variables](./12.png)
+📸 **Скриншот №14:** Полный лог MySQL (`general.log`)
+![general log](./14.png)
 
 ### 10.2. Фильтрация действий пользователя
 
@@ -284,15 +297,15 @@ docker exec my-mysql cat /var/lib/mysql/general.log \
   > my_actions.log
 ```
 
-📸 **Скриншот №14:** Содержимое отфильтрованного лога `my_actions.log`
-![filtered log](./13.png)
+📸 **Скриншот №15:** Содержимое отфильтрованного лога `my_actions.log`
+![filtered log](./15.png)
 
 ### 10.3. Файлы артефактов
 
 Все необходимые файлы успешно экспортированы в рабочую директорию:
 
-📸 **Скриншот №15:** Список файлов (`ls -la`)
-![files list](./14.png)
+📸 **Скриншот №16:** Список файлов (`ls -la`)
+![files list](./16.png)
 
 ### 10.4. Дамп базы данных
 
@@ -303,11 +316,8 @@ docker exec -e MYSQL_PWD=123 my-mysql mysqldump -uroot \
 
 Дамп содержит структуру таблицы, все созданные индексы и тестовые данные.
 
-📸 **Скриншот №16:** Первые 30 строк дампа `sort_dump.sql`
-![dump preview](./15.png)
-
-📸 **Скриншот №17:** Финальная проверка всех файлов в папке
-![final check](./16.png)
+📸 **Скриншот №17:** Первые 30 строк дампа `sort_dump.sql`
+![dump preview](./17.png)
 
 ---
 
@@ -346,23 +356,24 @@ mysql-sort-lab/
 ├── my_actions.log      ← Отфильтрованный лог SQL-действий
 ├── general.log         ← Полный лог MySQL
 ├── sort_dump.sql       ← Дамп базы данных sort_practice
-├── 1.png               ← Скриншот my.cnf
-├── 2.png               ← Скриншот docker ps
-├── 3.png               ← Скриншот входа в MySQL
-├── 4.png               ← Скриншот COUNT(*)
-├── 5.png               ← Скриншот SHOW CREATE TABLE
-├── 6.png               ← EXPLAIN: ORDER BY без индекса
-├── 7.png               ← EXPLAIN: ORDER BY с индексом
-├── 8.png               ← Сравнение ASC/ASC и ASC/DESC
-├── 9.png               ← EXPLAIN: GROUP BY без индекса
-├── 9.5.png             ← EXPLAIN: Нисходящий индекс
-├── 10.png              ← EXPLAIN: Loose Index Scan
-├── 11.png              ← EXPLAIN: Покрывающий индекс
-├── 12.png              ← Переменные general_log
-├── 13.png              ← Содержимое my_actions.log
-├── 14.png              ← ls -la (лог и дамп)
-├── 15.png              ← head sort_dump.sql
-└── 16.png              ← Финальная проверка файлов
+├── 1.png               ← Скриншот mkdir/pwd
+├── 2.png               ← Скриншот COUNT(*)
+├── 3.png               ← Скриншот cat my.cnf
+├── 4.png               ← Скриншот входа в MySQL
+├── 5.png               ← Скриншот docker ps
+├── 6.png               ← Скриншот SHOW CREATE TABLE
+├── 7.png               ← Скриншот Backward index scan
+├── 8.png               ← Скриншот Using filesort
+├── 9.png               ← Скриншот направления сортировки
+├── 9.5.png             ← Скриншот нисходящего индекса
+├── 10.png              ← Скриншот GROUP BY temporary
+├── 11.png              ← Скриншот покрывающего индекса
+├── 12.png              ← Скриншот экспорта логов
+├── 13.png              ← Скриншот Loose Index Scan
+├── 14.png              ← Скриншот general.log
+├── 15.png              ← Скриншот my_actions.log
+├── 16.png              ← Скриншот ls -la
+└── 17.png              ← Скриншот дампа базы
 ```
 
 ---
