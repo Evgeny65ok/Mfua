@@ -1,0 +1,19 @@
+2026-11-18T07:13:31.648049Z	    8 Query	CREATE DATABASE fulltext_practice
+2026-11-18T07:13:40.357595Z	    8 Query	SELECT DATABASE()
+2026-11-18T07:13:51.226180Z	    8 Query	CREATE TABLE articles (
+2026-11-18T07:13:59.296443Z	    8 Query	INSERT INTO articles (title, body, author) VALUES
+2026-11-18T07:14:12.783878Z	    8 Query	SELECT * FROM articles
+2026-11-18T07:14:31.384715Z	    8 Query	EXPLAIN SELECT * FROM articles WHERE body LIKE '%replication%'
+2026-11-18T07:14:51.556008Z	    8 Query	CREATE FULLTEXT INDEX ft_articles ON articles(title, body)
+2026-11-18T07:14:59.622092Z	    8 Query	SHOW INDEX FROM articles
+2026-11-18T07:15:45.733349Z	    8 Query	EXPLAIN SELECT * FROM articles WHERE MATCH(title, body) AGAINST ('replication')
+2026-11-18T07:17:09.043291Z	    8 Query	SELECT id, title,
+2026-11-18T07:17:16.461627Z	    8 Query	SELECT id, title, MATCH(title, body) AGAINST ('MySQL replication') AS score
+2026-11-18T07:17:21.116982Z	    8 Query	SELECT id, title FROM articles
+2026-11-18T07:17:25.656169Z	    8 Query	SELECT id, title FROM articles
+2026-11-18T07:17:30.407990Z	    8 Query	SELECT id, title FROM articles
+2026-11-18T07:17:35.981430Z	    8 Query	SELECT id, title
+2026-11-18T07:22:18.619384Z	    8 Query	SHOW VARIABLES LIKE 'innodb_ft_min_token_size'
+2026-11-18T07:22:23.356411Z	    8 Query	SELECT id, title FROM articles
+2026-11-18T07:22:28.479293Z	    8 Query	SHOW VARIABLES LIKE 'innodb_ft_enable_stopword'
+2026-11-18T07:22:38.722656Z	    8 Query	SELECT id, title FROM articles
